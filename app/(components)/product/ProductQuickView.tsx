@@ -1,50 +1,27 @@
 "use client";
 
 import { Dialog, RadioGroup, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
+import { FC, Fragment, useState } from "react";
 
 import Image from 'next/image';
+import { Product } from "@/app/types/Product";
 import { StarIcon } from "@heroicons/react/20/solid";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import classnames from "@/app/utils/classnames";
+import { useProductsStore } from "@/app/store/products";
 
-const product = {
-  name: "Basic Tee 6-Pack ",
-  price: "$192",
-  rating: 3.9,
-  reviewCount: 117,
-  href: "#",
-  imageSrc:
-    "https://tailwindui.com/img/ecommerce-images/product-quick-preview-02-detail.jpg",
-  imageAlt: "Two each of gray, white, and black shirts arranged on table.",
-  colors: [
-    { name: "White", class: "bg-white", selectedClass: "ring-gray-400" },
-    { name: "Gray", class: "bg-gray-200", selectedClass: "ring-gray-400" },
-    { name: "Black", class: "bg-gray-900", selectedClass: "ring-gray-900" },
-  ],
-  sizes: [
-    { name: "XXS", inStock: true },
-    { name: "XS", inStock: true },
-    { name: "S", inStock: true },
-    { name: "M", inStock: true },
-    { name: "L", inStock: true },
-    { name: "XL", inStock: true },
-    { name: "XXL", inStock: true },
-    { name: "XXXL", inStock: false },
-  ],
-};
-
-const ProductQuickView = () => {
+const ProductQuickView: FC<{ product: Product }>  = ({ product }) => {
   const [open, setOpen] = useState(false);
-  const [selectedColor, setSelectedColor] = useState(product.colors[0]);
-  const [selectedSize, setSelectedSize] = useState(product.sizes[2]);
+  const [selectedColor, setSelectedColor] = useState(product.metadata?.colors[0]);
+  const [selectedSize, setSelectedSize] = useState(product.metadata?.sizes[2]);
+  const addToCart = useProductsStore((state) => state.addToCart);
 
   return (
     <>
       <div className="flex items-end p-4">
         <button
           type="button"
-          className="relative z-20 w-full rounded-md bg-white bg-opacity-75 px-4 py-2 text-sm text-gray-900 opacity-0 focus:opacity-100 group-hover:opacity-100"
+          className="relative z-10 w-full rounded-md bg-white bg-opacity-75 px-4 py-2 text-sm text-gray-900 opacity-0 group-hover:opacity-100"
           onClick={(e) => {
             e.preventDefault()
             e.stopPropagation()
@@ -141,7 +118,7 @@ const ProductQuickView = () => {
                                 href="#"
                                 className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500"
                               >
-                                {product.reviewCount} reviews
+                                {product.reviews.totalCount} reviews
                               </a>
                             </div>
                           </div>
@@ -155,7 +132,7 @@ const ProductQuickView = () => {
                             Product options
                           </h3>
 
-                          <form>
+                          {/* <form> */}
                             {/* Colors */}
                             <div>
                               <h4 className="text-sm font-medium text-gray-900">
@@ -171,7 +148,7 @@ const ProductQuickView = () => {
                                   Choose a color
                                 </RadioGroup.Label>
                                 <span className="flex items-center space-x-3">
-                                  {product.colors.map((color) => (
+                                  {product.metadata?.colors?.map((color) => (
                                     <RadioGroup.Option
                                       key={color.name}
                                       value={color}
@@ -228,7 +205,7 @@ const ProductQuickView = () => {
                                   Choose a size
                                 </RadioGroup.Label>
                                 <div className="grid grid-cols-4 gap-4">
-                                  {product.sizes.map((size) => (
+                                  {product.metadata?.sizes?.map((size) => (
                                     <RadioGroup.Option
                                       key={size.name}
                                       value={size}
@@ -291,12 +268,14 @@ const ProductQuickView = () => {
                             </div>
 
                             <button
-                              type="submit"
+                              // type="submit"
+                              type="button"
                               className="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                              onClick={() => addToCart(product.id)}
                             >
                               Add to bag
                             </button>
-                          </form>
+                          {/* </form> */}
                         </section>
                       </div>
                     </div>

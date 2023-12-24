@@ -1,5 +1,6 @@
 import './globals.css'
 
+import Drawer from './(components)/drawer/Drawer'
 import Footer from './(domains)/footer'
 import Header from './(domains)/header'
 import { Inter } from 'next/font/google'
@@ -22,10 +23,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={classnames(inter.className)}>
         <Header />
-        <main className='px-4 py-16 sm:px-6 sm:py-24 lg:px-8'>
+        <main className='px-4 py-20 sm:px-6 sm:py-24 lg:px-8'>
           {children}
         </main>
         <Footer />
+        <Drawer />
       </body>
     </html>
   )
