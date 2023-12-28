@@ -92,6 +92,7 @@ const HeaderMobile = () => {
                             <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
                               <Image
                                 fill={true}
+                                loading="lazy"
                                 src={item.imageSrc}
                                 alt={item.imageAlt}
                                 className="object-cover object-center"
@@ -184,6 +185,7 @@ const HeaderMobile = () => {
                   <Image
                     width={20}
                     height={20}
+                    loading="lazy"
                     src="https://tailwindui.com/img/flags/flag-canada.svg"
                     alt=""
                     className="block h-auto w-5 flex-shrink-0"

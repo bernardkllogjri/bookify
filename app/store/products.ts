@@ -42,6 +42,38 @@ export const useProductsStore = createSelectors(createStore<State & Actions>(
             src: "https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-04.jpg",
             alt: "Model wearing plain white basic tee.",
           },
+          {
+            src: "https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-01.jpg",
+            alt: "Two each of gray, white, and black shirts laying flat.",
+          },
+          {
+            src: "https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-02.jpg",
+            alt: "Model wearing plain black basic tee.",
+          },
+          {
+            src: "https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-03.jpg",
+            alt: "Model wearing plain gray basic tee.",
+          },
+          {
+            src: "https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-04.jpg",
+            alt: "Model wearing plain white basic tee.",
+          },
+          {
+            src: "https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-01.jpg",
+            alt: "Two each of gray, white, and black shirts laying flat.",
+          },
+          {
+            src: "https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-02.jpg",
+            alt: "Model wearing plain black basic tee.",
+          },
+          {
+            src: "https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-03.jpg",
+            alt: "Model wearing plain gray basic tee.",
+          },
+          {
+            src: "https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-04.jpg",
+            alt: "Model wearing plain white basic tee.",
+          },
         ],
         imageSrc:
           "https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-01.jpg",

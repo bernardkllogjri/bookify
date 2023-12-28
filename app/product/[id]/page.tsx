@@ -12,15 +12,14 @@ import { useProductsStore } from "@/app/store/products";
 const Product = ({ params: { id } }: { params: { id: string } }) => {
   const selectProduct = useProductsStore((store) => store.selectProduct);
   const addToCart = useProductsStore((state) => state.addToCart);
-  useEffect(() => selectProduct(id), [id])
+  useEffect(() => selectProduct(id), [id]);
   const product = useProductsStore((store) => store.selectedProduct);
   const [selectedColor, setSelectedColor] = useState(
     product?.metadata?.colors[0]
   );
   const [selectedSize, setSelectedSize] = useState(product?.metadata?.sizes[2]);
-  const [active, setActive] = useState(
-    product?.imageSrc
-  );
+  const [active, setActive] = useState(product?.imageSrc);
+  useEffect(() => setActive(product?.imageSrc), [product?.imageSrc]);
 
   return (
     <div className="bg-white">
@@ -68,58 +67,25 @@ const Product = ({ params: { id } }: { params: { id: string } }) => {
           {/* Image gallery */}
           <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
             <div className="col-span-2">
-              {/* <div className="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
-                <Image
-                  fill={true}
-                  src={product.images[0].src}
-                  alt={product.images[0].alt}
-                  className="h-full w-full object-cover object-center"
-                />
-              </div>
-              <div className="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
-                <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
-                  <Image
-                    fill={true}
-                    src={product.images[1].src}
-                    alt={product.images[1].alt}
-                    className="h-full w-full object-cover object-center"
-                  />
-                </div>
-                <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
-                  <Image
-                    fill={true}
-                    src={product.images[2].src}
-                    alt={product.images[2].alt}
-                    className="h-full w-full object-cover object-center"
-                  />
-                </div>
-              </div>
-              <div className="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg">
-                <Image
-                  fill={true}
-                  src={product.images[3].src}
-                  alt={product.images[3].alt}
-                  className="h-full w-full object-cover object-center"
-                />
-              </div> */}
               <div className="grid gap-4">
                 <div>
                   <img
-                    className="h-auto w-full max-w-full rounded-lg object-cover object-center md:h-[480px]"
+                    className="rounded-lg object-cover object-center md:h-[480px] mx-auto"
                     src={active}
                     alt=""
                   />
                 </div>
-                <div className="grid grid-cols-5 gap-4">
+                <div className="flex space-between gap-4 overflow-x-auto">
                   {product.images.map(({ src }, index) => (
-                    <div key={index}>
-                      <img
-                        onClick={() => setActive(src)}
-                        src={src}
-                        className="h-20 max-w-full cursor-pointer rounded-lg object-cover object-center"
-                        alt="gallery-image"
-                      />
-                    </div>
+                    <Image
+                      key={index}
+                      width={80}
+                      height={80}
+                      onClick={() => setActive(src)}
+                      src={src}
+                      className="h-20 max-w-full cursor-pointer rounded-lg object-cover object-center"
+                      alt="gallery-image"
+                    />
                   ))}
                 </div>
               </div>
@@ -174,11 +140,14 @@ const Product = ({ params: { id } }: { params: { id: string } }) => {
                 </div>
               </div>
 
-              <form className="mt-6" onSubmit={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                addToCart(product.id)
-              }}>
+              <form
+                className="mt-6"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  addToCart(product.id);
+                }}
+              >
                 {/* Colors */}
                 <div>
                   <h3 className="text-sm font-medium text-gray-900">Color</h3>

@@ -11,13 +11,12 @@ const Drawer = () => {
   const drawerOpen = useAppStore.use.drawerOpen();
   const products = useProductsStore.use.productsInCart();
   const closeDrawer = useAppStore.use.closeDrawer();
-  const openDrawer = useAppStore.use.openDrawer();
   const getProductsInCartTotalPrice = useProductsStore.use.getProductsInCartTotalPrice();
   const removeFromCart = useProductsStore.use.removeFromCart();
 
   return (
     <Transition.Root show={drawerOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={openDrawer}>
+      <Dialog as="div" className="relative z-10" onClose={closeDrawer}>
         <Transition.Child
           as={Fragment}
           enter="ease-in-out duration-300"

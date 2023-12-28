@@ -12,6 +12,8 @@
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.1.1",
     "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@trpc/client": "^10.45.0",
+    "@trpc/server": "^10.45.0",
     "immer": "^10.0.3",
     "next": "14.0.4",
     "next-auth": "^5.0.0-beta.4",
