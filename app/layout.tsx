@@ -1,10 +1,11 @@
 import './globals.css'
 
-import Drawer from './(components)/drawer/Drawer'
+import CartDrawer from './(components)/cart-drawer/CartDrawer'
 import Footer from './(domains)/footer'
 import Header from './(domains)/header'
 import { Inter } from 'next/font/google'
 import type { Metadata } from 'next'
+import ProductQuickViewModal from './(components)/product/ProductQuickViewModal'
 import classnames from './utils/classnames'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -27,7 +28,8 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
-        <Drawer />
+        <CartDrawer />
+        <ProductQuickViewModal />
       </body>
     </html>
   )

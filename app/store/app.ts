@@ -5,12 +5,15 @@ import { Navigation } from "../types/App";
 type State = {
   navigation: Navigation;
   popOverMenuOpen: boolean;
-  drawerOpen: boolean;
+  quickViewOpen: boolean;
+  cartDrawerOpen: boolean;
 };
 
 type Actions = {
-  openDrawer: () => void;
-  closeDrawer: () => void;
+  openCartDrawer: () => void;
+  closeCartDrawer: () => void;
+  openQuickView: () => void;
+  closeQuickView: () => void;
   openPopOverMenu: () => void;
   closePopOverMenu: () => void;
 };
@@ -148,9 +151,12 @@ export const useAppStore = createSelectors(createStore<State & Actions>(
       ],
     },
     popOverMenuOpen: false,
-    drawerOpen: false,
-    openDrawer: () => set({ drawerOpen: true }),
-    closeDrawer: () => set({ drawerOpen: false }),
+    cartDrawerOpen: false,
+    quickViewOpen: false,
+    openQuickView: () => set({ quickViewOpen: true }),
+    closeQuickView: () => set({ quickViewOpen: false }),
+    openCartDrawer: () => set({ cartDrawerOpen: true }),
+    closeCartDrawer: () => set({ cartDrawerOpen: false }),
     openPopOverMenu: () => set({ popOverMenuOpen: true }),
     closePopOverMenu: () => set({ popOverMenuOpen: false }),
   })

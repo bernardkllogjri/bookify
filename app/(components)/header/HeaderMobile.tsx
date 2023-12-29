@@ -186,9 +186,9 @@ const HeaderMobile = () => {
                     width={20}
                     height={20}
                     loading="lazy"
+                    className="h-5 w-5"
                     src="https://tailwindui.com/img/flags/flag-canada.svg"
-                    alt=""
-                    className="block h-auto w-5 flex-shrink-0"
+                    alt="Language flag"
                   />
                   <span className="ml-3 block text-base font-medium text-gray-900">
                     CAD

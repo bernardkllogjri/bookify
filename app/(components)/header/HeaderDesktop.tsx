@@ -1,27 +1,19 @@
 "use client";
 
-import {
-  Bars3Icon,
-  MagnifyingGlassIcon,
-  ShoppingBagIcon,
-} from "@heroicons/react/24/outline";
+import { Bars3Icon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { Popover, Transition } from "@headlessui/react";
 
+import Cart from "../cart/Cart";
 import { Fragment } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import classnames from "@/app/utils/classnames";
 import { signIn } from "next-auth/react";
 import { useAppStore } from "@/app/store/app";
-import { useProductsStore } from "@/app/store/products";
 
 const HeaderDesktop = () => {
-  const navigation = useAppStore.use.navigation()
-  const openDrawer = useAppStore.use.openDrawer()
-  const openPopOverMenu = useAppStore.use.openPopOverMenu()
-  const productsInCart = useProductsStore.use.productsInCart()
-  const productsInCartCount = productsInCart.length
-  
+  const navigation = useAppStore.use.navigation();
+  const openPopOverMenu = useAppStore.use.openPopOverMenu();
 
   return (
     <header className="relative bg-white">
@@ -50,9 +42,9 @@ const HeaderDesktop = () => {
                   width={32}
                   height={32}
                   loading="lazy"
-                  className="h-8 w-auto"
+                  className="h-8 w-8"
                   src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                  alt=""
+                  alt="Logo"
                 />
               </Link>
             </div>
@@ -209,9 +201,9 @@ const HeaderDesktop = () => {
                     width={20}
                     height={20}
                     loading="lazy"
+                    className="h-5 w-5"
                     src="https://tailwindui.com/img/flags/flag-canada.svg"
-                    alt=""
-                    className="block h-auto w-5 flex-shrink-0"
+                    alt="Language flag"
                   />
                   <span className="ml-3 block text-sm font-medium">CAD</span>
                   <span className="sr-only">, change currency</span>
@@ -220,7 +212,10 @@ const HeaderDesktop = () => {
 
               {/* Search */}
               <div className="flex lg:ml-6">
-                <Link href="#" className="p-2 text-gray-400 hover:text-gray-500">
+                <Link
+                  href="#"
+                  className="p-2 text-gray-400 hover:text-gray-500"
+                >
                   <span className="sr-only">Search</span>
                   <MagnifyingGlassIcon className="h-6 w-6" aria-hidden="true" />
                 </Link>
@@ -228,16 +223,7 @@ const HeaderDesktop = () => {
 
               {/* Cart */}
               <div className="ml-4 flow-root lg:ml-6">
-                <button onClick={openDrawer} className="group -m-2 flex items-center p-2">
-                  <ShoppingBagIcon
-                    className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                    aria-hidden="true"
-                  />
-                  <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-                    {productsInCartCount}
-                  </span>
-                  <span className="sr-only">items in cart, view bag</span>
-                </button>
+                <Cart />
               </div>
             </div>
           </div>

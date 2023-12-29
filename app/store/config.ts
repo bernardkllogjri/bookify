@@ -1,7 +1,8 @@
 import { StateCreator, StoreApi, UseBoundStore, create } from "zustand";
+import { StateStorage, createJSONStorage, persist } from "zustand/middleware";
+import { del, get, set } from 'idb-keyval'
 
 import { immer } from "zustand/middleware/immer";
-import { persist } from "zustand/middleware";
 
 // it should be immer(devtools(...)) always because devtools needs to have the latest update in order to log the result https://github.com/pmndrs/zustand/blob/main/docs/guides/typescript.md#using-middlewares
 
@@ -31,20 +32,30 @@ const createSelectors = <S extends UseBoundStore<StoreApi<object>>>(
   return store;
 };
 
-
-const logger: Logger = (config) => (set, get, api) =>
-  config(
-    (...args) => {
-      console.log("  %capplying", 'color:red;', args);
-      set(...args);
-      console.log("  %cnew state", 'color:rgb(74 222 128);', get());
-    },
-    get,
-    api
-  );
+const storage: StateStorage = {
+  getItem: async (name: string): Promise<string | null> => {
+    console.log(`  %c${name}`, "color:deepskyblue;font-weight:bold;", 'initialized')
+    return (await get(name)) || null
+  },
+  setItem: async (name: string, value: string): Promise<void> => {
+    console.log(`  %c${name}`, "color:rgb(74 222 128);font-weight:bold;", JSON.parse(value))
+    await set(name, value)
+  },
+  removeItem: async (name: string): Promise<void> => {
+    console.log(`  %c${name}`, "color:red;font-weight:bold;", 'has been deleted')
+    await del(name)
+  },
+}
 
 const createStore = <T>(storageName: string, config: MainStateCreator<T>) => {
-  return create<T>()(immer(persist(logger(config), { name: storageName })));
+  return create<T>()(
+    immer(
+      persist(config, {
+        name: storageName,
+        storage: createJSONStorage(() => storage),
+      })
+    )
+  );
 };
 
 export { createStore, createSelectors };

@@ -3,20 +3,21 @@
 import { Dialog, Transition } from "@headlessui/react";
 
 import { Fragment } from "react";
+import Image from "next/image";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useAppStore } from "@/app/store/app";
 import { useProductsStore } from "@/app/store/products";
 
-const Drawer = () => {
-  const drawerOpen = useAppStore.use.drawerOpen();
+const CartDrawer = () => {
+  const cartDrawerOpen = useAppStore.use.cartDrawerOpen();
   const products = useProductsStore.use.productsInCart();
-  const closeDrawer = useAppStore.use.closeDrawer();
+  const closeCartDrawer = useAppStore.use.closeCartDrawer();
   const getProductsInCartTotalPrice = useProductsStore.use.getProductsInCartTotalPrice();
   const removeFromCart = useProductsStore.use.removeFromCart();
 
   return (
-    <Transition.Root show={drawerOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={closeDrawer}>
+    <Transition.Root show={cartDrawerOpen} as={Fragment}>
+      <Dialog as="div" className="relative z-10" onClose={closeCartDrawer}>
         <Transition.Child
           as={Fragment}
           enter="ease-in-out duration-300"
@@ -52,7 +53,7 @@ const Drawer = () => {
                           <button
                             type="button"
                             className="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
-                            onClick={closeDrawer}
+                            onClick={closeCartDrawer}
                           >
                             <span className="absolute -inset-0.5" />
                             <span className="sr-only">Close panel</span>
@@ -70,10 +71,12 @@ const Drawer = () => {
                             {products.map((product) => (
                               <li key={product.id} className="flex py-6">
                                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                  <img
+                                  <Image
+                                    height={96}
+                                    width={96}
                                     src={product.imageSrc}
                                     alt={product.imageAlt}
-                                    className="h-full w-full object-cover object-center"
+                                    className=" object-cover object-center"
                                   />
                                 </div>
 
@@ -136,11 +139,11 @@ const Drawer = () => {
                       </div>
                       <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                         <p>
-                          or
+                          or&nbsp;
                           <button
                             type="button"
                             className="font-medium text-indigo-600 hover:text-indigo-500"
-                            onClick={closeDrawer}
+                            onClick={closeCartDrawer}
                           >
                             Continue Shopping
                             <span aria-hidden="true"> &rarr;</span>
@@ -159,4 +162,4 @@ const Drawer = () => {
   );
 };
 
-export default Drawer;
+export default CartDrawer;
