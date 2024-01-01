@@ -1,16 +1,18 @@
-"use client";
-
+import { FC } from "react";
 import { ShoppingBagIcon } from "@heroicons/react/24/outline";
-import { useAppStore } from "@/app/__shared/store";
-import { useProductsStore } from "@/app/product/store";
 
-const CartIcon = () => {
-  const openCartDrawer = useAppStore.use.openCartDrawer();
-  const productsInCartCount = useProductsStore.use.productsInCart()?.length;
+type CartIconProps = {
+  onClick: () => void;
+  productsInCartCount: number
+}
 
+const CartIcon: FC<CartIconProps> = ({
+  onClick,
+  productsInCartCount
+}) => {
   return (
     <button
-      onClick={openCartDrawer}
+      onClick={onClick}
       className="group -m-2 flex items-center p-2"
     >
       <ShoppingBagIcon

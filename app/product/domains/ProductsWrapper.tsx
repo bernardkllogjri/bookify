@@ -1,13 +1,20 @@
-'use client'
+"use client";
 
 import { Product } from "../types";
-import ProductItem from "../components/ProductItem";
+import ProductCard from "../components/ProductCard";
+import { useAppStore } from "@/app/__shared/store";
 import { useEffect } from "react";
 import { useProductsStore } from "../store";
 
 const ProductsWrapper = ({ products }: { products: Product[] }) => {
-  const setProducts = useProductsStore.use.setProducts()
-  useEffect(() => void setProducts(products), [setProducts, products])
+  const setProducts = useProductsStore.use.setProducts();
+  const openQuickView = useAppStore.use.openQuickView();
+  const selectProduct = useProductsStore.use.selectProduct();
+  const onQuickViewOpen = (id: Product["id"]) => () => {
+    selectProduct(id);
+    openQuickView();
+  };
+  useEffect(() => void setProducts(products), [setProducts, products]);
 
   return (
     <div className="bg-white">
@@ -16,7 +23,11 @@ const ProductsWrapper = ({ products }: { products: Product[] }) => {
         {products && products.length && (
           <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
             {products.map((product) => (
-              <ProductItem key={product.id} product={product} />
+              <ProductCard
+                key={product.id}
+                product={product}
+                onQuickViewOpen={onQuickViewOpen(product.id)}
+              />
             ))}
           </div>
         )}

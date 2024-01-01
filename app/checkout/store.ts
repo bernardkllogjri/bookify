@@ -56,7 +56,6 @@ export const useCheckoutStore = createSelectors(
         const data = await get().braintreeClient?.tokenize()
         if(!data || !data.nonce) return
         const res = await call.mutate({ paymentMethodNonce: data.nonce })
-        console.warn({ call, res });
     }
   }))
 );

@@ -1,20 +1,26 @@
-"use client";
-
 import { Dialog, Transition } from "@headlessui/react";
+import { FC, Fragment } from "react";
 
 import Cart from "../cart/Cart";
-import { Fragment } from "react";
 import Link from "next/link";
+import { ProductInCart } from "@/app/product/types";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { useAppStore } from "../../store";
-import { useProductsStore } from "@/app/product/store";
 
-const CartDrawer = () => {
-  const cartDrawerOpen = useAppStore.use.cartDrawerOpen();
-  const products = useProductsStore.use.productsInCart();
-  const closeCartDrawer = useAppStore.use.closeCartDrawer();
-  const cartTotalPrice = useProductsStore.use.getProductsInCartTotalPrice()();
+type CartDrawerProps = {
+  cartDrawerOpen: boolean;
+  products: ProductInCart[];
+  removeProductFromCart: (id: string) => void;
+  closeCartDrawer: () => void;
+  cartTotalPrice: string;
+};
 
+const CartDrawer: FC<CartDrawerProps> = ({
+  cartDrawerOpen,
+  products,
+  removeProductFromCart,
+  closeCartDrawer,
+  cartTotalPrice,
+}) => {
   return (
     <Transition.Root show={cartDrawerOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={closeCartDrawer}>
@@ -63,7 +69,10 @@ const CartDrawer = () => {
                       </div>
 
                       <div className="mt-8">
-                        <Cart />
+                        <Cart
+                          productsList={products}
+                          removeProductFromCart={removeProductFromCart}
+                        />
                       </div>
                     </div>
 

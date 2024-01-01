@@ -15,8 +15,9 @@ const CheckoutForm = ({ braintreeToken }: { braintreeToken: string }) => {
   const checkoutPayment = api.checkout.payCheckout.useMutation();
   const cartTotalPrice = useProductsStore.use.getProductsInCartTotalPrice()();
   const products = useProductsStore.use.productsInCart();
+  const removeProductFromCart = useProductsStore.use.removeFromCart();
   useEffect(
-    () => void initPaymentProvider(braintreeToken),
+    () => { initPaymentProvider(braintreeToken) },
     [initPaymentProvider, braintreeToken]
   );
 
@@ -109,7 +110,10 @@ const CheckoutForm = ({ braintreeToken }: { braintreeToken: string }) => {
           </p>
           {!!products.length && (
             <div className="mt-8 space-y-3 rounded-lg border bg-white px-2 py-4 sm:px-6 overflow-y-auto max-h-96">
-              <Cart />
+              <Cart
+                productsList={products}
+                removeProductFromCart={removeProductFromCart}
+              />
             </div>
           )}
           <p className="mt-8 text-lg font-medium">Shipping Methods</p>

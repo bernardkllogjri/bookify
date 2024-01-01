@@ -1,24 +1,15 @@
-"use client";
-
 import { FC } from "react";
-import { Product } from "@prisma/client";
-import { useAppStore } from "@/app/__shared/store";
-import { useProductsStore } from "../store";
 
-const ProductQuickViewButton: FC<{ productId: Product["id"] }>  = ({ productId }) => {
-  const openQuickView = useAppStore.use.openQuickView();
-  const selectProduct = useProductsStore.use.selectProduct();
-
+const ProductQuickViewButton: FC<{ onClick: () => void }> = ({ onClick }) => {
   return (
     <div className="flex items-end p-4">
       <button
         type="button"
         className="relative z-10 w-full rounded-md bg-white bg-opacity-75 px-4 py-2 text-sm text-gray-900 opacity-0 group-hover:opacity-100"
         onClick={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          openQuickView()
-          selectProduct(productId)
+          e.preventDefault();
+          e.stopPropagation();
+          onClick();
         }}
       >
         Quick View

@@ -1,15 +1,20 @@
-"use client";
-
+import { FC } from "react";
 import Image from "next/image";
-import { useProductsStore } from "@/app/product/store";
+import { ProductInCart } from "@/app/product/types";
 
-const Cart = () => {
-  const removeFromCart = useProductsStore.use.removeFromCart();
-  const products = useProductsStore.use.productsInCart();
+type CartProps = {
+  removeProductFromCart: (id: ProductInCart["id"]) => void;
+  productsList: ProductInCart[]
+}
 
+const Cart: FC<CartProps> = ({
+  removeProductFromCart,
+  productsList
+}) => {
+ 
   return (
     <ul role="list" className="divide-y divide-gray-200">
-      {products.map((product) => (
+      {productsList.map((product) => (
         <li key={product.id} className="flex py-6">
           <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
             <Image
@@ -40,7 +45,7 @@ const Cart = () => {
                 <button
                   type="button"
                   className="font-medium text-indigo-600 hover:text-indigo-500"
-                  onClick={() => removeFromCart(product.id)}
+                  onClick={() => removeProductFromCart(product.id)}
                 >
                   Remove
                 </button>
