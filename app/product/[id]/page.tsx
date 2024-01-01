@@ -6,14 +6,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { RadioGroup } from "@headlessui/react";
 import { StarIcon } from "@heroicons/react/20/solid";
-import classnames from "../../utils/classnames";
-import { useProductsStore } from "@/app/store/products";
+import classnames from "@/app/__shared/utils/classnames";
+import { useProductsStore } from "../store";
 
 const Product = ({ params: { id } }: { params: { id: string } }) => {
   const selectProduct = useProductsStore((store) => store.selectProduct);
   const addToCart = useProductsStore((state) => state.addToCart);
-  useEffect(() => selectProduct(id), [id]);
+  useEffect(() => selectProduct(id), [selectProduct, id]);
   const product = useProductsStore((store) => store.selectedProduct);
+  const { totalReviews } = product || {}
   const [selectedColor, setSelectedColor] = useState(
     product?.metadata?.colors[0]
   );
@@ -70,7 +71,7 @@ const Product = ({ params: { id } }: { params: { id: string } }) => {
               <div className="grid gap-4">
                 <div>
                   <img
-                    className="rounded-lg object-cover object-center md:h-[480px] mx-auto"
+                    className="rounded-lg object-cover object-center mx-auto"
                     src={active}
                     alt=""
                   />
@@ -79,11 +80,11 @@ const Product = ({ params: { id } }: { params: { id: string } }) => {
                   {product.images.map(({ src }, index) => (
                     <Image
                       key={index}
-                      width={80}
-                      height={80}
+                      width={160}
+                      height={160}
                       onClick={() => setActive(src)}
                       src={src}
-                      className="h-20 max-w-full cursor-pointer rounded-lg object-cover object-center"
+                      className="h-40 max-w-full cursor-pointer rounded-lg object-cover object-center"
                       alt="gallery-image"
                     />
                   ))}
@@ -102,34 +103,36 @@ const Product = ({ params: { id } }: { params: { id: string } }) => {
                 {product.price}
               </p>
               {/* Reviews */}
-              <div className="mt-3">
-                <h3 className="sr-only">Reviews</h3>
-                <div className="flex items-center">
+              {totalReviews && (
+                <div className="mt-3">
+                  <h3 className="sr-only">Reviews</h3>
                   <div className="flex items-center">
-                    {[0, 1, 2, 3, 4].map((rating) => (
-                      <StarIcon
-                        key={rating}
-                        className={classnames(
-                          product.reviews.average > rating
-                            ? "text-gray-900"
-                            : "text-gray-200",
-                          "h-5 w-5 flex-shrink-0"
-                        )}
-                        aria-hidden="true"
-                      />
-                    ))}
+                    <div className="flex items-center">
+                      {[0, 1, 2, 3, 4].map((rating) => (
+                        <StarIcon
+                          key={rating}
+                          className={classnames(
+                            (totalReviews.average || 0) > rating
+                              ? "text-gray-900"
+                              : "text-gray-200",
+                            "h-5 w-5 flex-shrink-0"
+                          )}
+                          aria-hidden="true"
+                        />
+                      ))}
+                    </div>
+                    <p className="sr-only">
+                      {totalReviews.average} out of 5 stars
+                    </p>
+                    <div
+                      // href={totalReviews.href}
+                      className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                    >
+                      {totalReviews.count} reviews
+                    </div>
                   </div>
-                  <p className="sr-only">
-                    {product.reviews.average} out of 5 stars
-                  </p>
-                  <Link
-                    href={product.reviews.href}
-                    className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500"
-                  >
-                    {product.reviews.totalCount} reviews
-                  </Link>
                 </div>
-              </div>
+              )}
               <div className="mt-6">
                 <h3 className="sr-only">Description</h3>
 
