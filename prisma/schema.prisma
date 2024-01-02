@@ -1,11 +1,12 @@
-
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider          = "mysql"
+  relationMode      = "prisma"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
@@ -26,6 +27,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {
@@ -34,6 +36,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model User {
@@ -60,6 +64,8 @@ model ProductImage {
   src       String
   alt       String
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
 }
 
 model Review {
@@ -68,6 +74,8 @@ model Review {
   rating    Float
   comment   String? @db.Text
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
 }
 
 model ProductBreadcrumb {
@@ -76,6 +84,17 @@ model ProductBreadcrumb {
   name      String
   href      String
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+}
+
+model ProductHighlights {
+  id        String  @id @default(cuid())
+  name      String  @db.Text
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
 }
 
 model Product {
@@ -88,8 +107,8 @@ model Product {
   imageAlt    String
   rating      Float
   metadata    Json?
-  description String
-  highlights  String[]
-  details     String
+  description String  @db.Text
+  highlights  ProductHighlights[]
+  details     String  @db.Text
   breadcrumbs ProductBreadcrumb[]
 }

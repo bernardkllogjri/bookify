@@ -1,6 +1,7 @@
 import {
   Product as PrismaProduct,
   ProductBreadcrumb,
+  ProductHighlights,
   ProductImage,
   Review,
 } from "@prisma/client";
@@ -15,6 +16,7 @@ export type Metadata = {
 
 export interface Product extends PrismaProduct {
   images: ProductImage[];
+  highlights: ProductHighlights[];
   breadcrumbs: ProductBreadcrumb[];
   reviews: Review[];
   metadata: Metadata;

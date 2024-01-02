@@ -292,9 +292,9 @@ const ProductItemWrapper = ({ productId }: { productId: string } ) => {
                       role="list"
                       className="list-disc space-y-2 pl-4 text-sm"
                     >
-                      {product.highlights.map((highlight) => (
-                        <li key={highlight} className="text-gray-400">
-                          <span className="text-gray-600">{highlight}</span>
+                      {product.highlights.map(({ name, id }) => (
+                        <li key={id} className="text-gray-400">
+                          <span className="text-gray-600">{name}</span>
                         </li>
                       ))}
                     </ul>
