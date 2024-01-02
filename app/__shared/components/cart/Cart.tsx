@@ -1,5 +1,6 @@
 import { FC } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { ProductInCart } from "@/app/product/types";
 
 type CartProps = {
@@ -30,7 +31,7 @@ const Cart: FC<CartProps> = ({
             <div>
               <div className="flex justify-between text-base font-medium text-gray-900">
                 <h3>
-                  <a href={`/product/${product.id}`}>{product.name}</a>
+                  <Link href={`/product/${product.id}`}>{product.name}</Link>
                 </h3>
                 <p className="ml-4">{product.price}</p>
               </div>
