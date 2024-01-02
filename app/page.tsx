@@ -8,4 +8,5 @@ const Home = async () => {
   return <ProductsWrapper products={products as Product[]} />
 }
 
+export const dynamic = 'force-static'
 export default Home;

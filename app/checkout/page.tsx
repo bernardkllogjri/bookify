@@ -7,4 +7,5 @@ const Checkout = async () => {
   return <CheckoutForm braintreeToken={clientToken} />;
 };
 
+export const dynamic = 'force-static'
 export default Checkout;

@@ -2,6 +2,7 @@ import GitHub from "@auth/core/providers/github";
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
+import { Provider } from "next-auth/providers";
 
 const prisma = new PrismaClient();
 
@@ -19,5 +20,5 @@ export const {
     }),
   },
   adapter: PrismaAdapter(prisma),
-  providers: [GitHub],
+  providers: [GitHub] as Provider[],
 });

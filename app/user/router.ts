@@ -3,12 +3,10 @@ import {
   publicProcedure,
 } from "@/app/__shared/server/trpc";
 
-import { db } from "@/app/__shared/server/db";
-
 export const userRouter = createTRPCRouter({
   usersList: publicProcedure
-    .query(() => {
-      return db.user.findMany()
+    .query(({ ctx }) => {
+      return ctx.db.user.findMany()
     }),
 
 });
