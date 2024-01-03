@@ -1,26 +1,27 @@
 "use client";
 
+import { FC, useEffect } from "react";
+
 import Cart from "@/app/__shared/components/cart/Cart";
 import Image from "next/image";
 import Link from "next/link";
-import { api } from "@/app/__shared/utils/trpc/react";
+import { ProductInCart } from "@/app/product/types";
 import { useCheckoutStore } from "../store";
-import { useEffect } from "react";
 import { useProductsStore } from "@/app/product/store";
 
-const CheckoutForm = ({ braintreeToken }: { braintreeToken: string }) => {
-  const initPaymentProvider = useCheckoutStore.use.initPaymentProvider();
-  const checkoutWithPaymentProvider =
-    useCheckoutStore.use.checkoutWithPaymentProvider();
-  const checkoutPayment = api.checkout.payCheckout.useMutation();
-  const cartTotalPrice = useProductsStore.use.getProductsInCartTotalPrice()();
-  const products = useProductsStore.use.productsInCart();
-  const removeProductFromCart = useProductsStore.use.removeFromCart();
-  useEffect(
-    () => { initPaymentProvider(braintreeToken) },
-    [initPaymentProvider, braintreeToken]
-  );
+type CheckoutFormProps = {
+  products: ProductInCart[];
+  checkoutWithPaymentProvider: () => Promise<void>;
+  removeProductFromCart: (id: string) => void;
+  cartTotalPrice: string;
+};
 
+const CheckoutForm: FC<CheckoutFormProps> = ({
+  products,
+  checkoutWithPaymentProvider,
+  removeProductFromCart,
+  cartTotalPrice,
+}) => {
   return (
     <>
       <div className="flex flex-col items-center border-b bg-white pb-8 sm:flex-row sm:px-10 lg:px-20 xl:px-32">
@@ -324,7 +325,7 @@ const CheckoutForm = ({ braintreeToken }: { braintreeToken: string }) => {
                 </p>
               </div>
               <button
-                onClick={checkoutWithPaymentProvider(checkoutPayment)}
+                onClick={checkoutWithPaymentProvider}
                 className="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white"
               >
                 Place Order

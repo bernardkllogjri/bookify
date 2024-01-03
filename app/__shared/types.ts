@@ -28,7 +28,13 @@ export type Page = {
   href: string;
 };
 
-export interface Navigation {
+export type Navigation = {
   categories: Category[];
   pages: Page[];
+}
+
+export type Breadcrumb = { 
+  id: string;
+  name: string;
+  href: string;
 }

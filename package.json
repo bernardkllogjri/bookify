@@ -24,8 +24,10 @@
     "@types/braintree-web": "^3.96.10",
     "braintree": "^3.20.0",
     "braintree-web": "^3.98.0",
+    "clsx": "^2.1.0",
     "idb-keyval": "^6.2.1",
     "immer": "^10.0.3",
+    "leiten-zustand": "^1.4.1",
     "next": "14.0.4",
     "next-auth": "^5.0.0-beta.4",
     "prisma": "^5.7.1",
@@ -33,7 +35,8 @@
     "react-dom": "^18",
     "superjson": "^2.2.1",
     "zod": "^3.22.4",
-    "zustand": "^4.4.7"
+    "zustand": "^4.4.7",
+    "zustand-ards": "^0.2.0"
   },
   "devDependencies": {
     "@types/node": "^20",

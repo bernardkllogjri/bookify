@@ -1,6 +1,6 @@
 import { Product, ProductInCart } from "./types";
-import { createSelectors, createStore } from "@/app/__shared/store/config";
 
+import { createStore } from "@/app/__shared/store/config";
 import formatCurrency from "@/app/__shared/utils/formatCurrency";
 import parseCurrency from "@/app/__shared/utils/parseCurrency";
 
@@ -27,14 +27,15 @@ type State = {
 type Actions = {
   selectProduct: (id: string) => void;
   removeSelectedProduct: () => void;
-  addToCart: (id: string) => void;
+  addToCart: (id?: string) => void;
   removeFromCart: (id: string) => void;
   getProductsInCartTotalPrice: () => string;
   setProducts: (products: Product[]) => void;
 };
 
-export const useProductsStore = createSelectors(
-  createStore<State & Actions>("products-storage", (set, get) => ({
+export const useProductsStore = createStore<State & Actions>(
+  "products-storage",
+  (set, get) => ({
     products: [],
     productsInCart: [],
     selectedProduct: null,
@@ -56,13 +57,14 @@ export const useProductsStore = createSelectors(
     removeSelectedProduct: () => set(() => ({ selectedProduct: null })),
     addToCart: (productId) => {
       set((state) => {
+        if (!productId) productId = get().selectedProduct?.id;
         let product = state.products.find(
           ({ id }) => id === productId
         ) as ProductInCart;
         const productInCartIdx = state.productsInCart.findIndex(
           ({ id }) => id === productId
         );
-        const productInCart = state.productsInCart[productInCartIdx];
+        let productInCart = state.productsInCart[productInCartIdx];
         if (productInCartIdx !== -1) {
           productInCart.quantity = productInCart.quantity + 1;
           state.productsInCart[productInCartIdx] = productInCart;
@@ -86,5 +88,5 @@ export const useProductsStore = createSelectors(
         }
       });
     },
-  }))
+  })
 );

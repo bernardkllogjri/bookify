@@ -6,7 +6,7 @@ import {
   Review,
 } from "@prisma/client";
 
-export type Metadata = {
+export type ProductOptions = {
   colors: { name: string; class: string; selectedClass: string }[];
   sizes: {
     name: "XXS" | "XS" | "S" | "M" | "L" | "XL" | "XXL" | "XXXL";
@@ -19,7 +19,7 @@ export interface Product extends PrismaProduct {
   highlights: ProductHighlights[];
   breadcrumbs: ProductBreadcrumb[];
   reviews: Review[];
-  metadata: Metadata;
+  options: ProductOptions;
   totalReviews?: {
     count: number;
     average: number;

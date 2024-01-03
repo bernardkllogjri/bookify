@@ -3,10 +3,8 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import MainWrapper from "./__shared/domains/MainWrapper";
 import type { Metadata } from "next";
-import { TRPCReactProvider } from "@/app/__shared/utils/trpc/react";
 import { auth } from "@/app/__shared/server/auth";
-import classnames from "@/app/__shared/utils/classnames";
-import { cookies } from "next/headers";
+import clsx from "clsx";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,12 +23,8 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={classnames(inter.className)}>
-        <TRPCReactProvider cookies={cookies().toString()}>
-          <MainWrapper user={user}>
-            {children}
-            </MainWrapper>
-        </TRPCReactProvider>
+      <body className={clsx(inter.className)}>
+        <MainWrapper user={user}>{children}</MainWrapper>
       </body>
     </html>
   );

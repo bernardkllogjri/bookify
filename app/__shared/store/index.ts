@@ -1,6 +1,5 @@
-import { createSelectors, createStore } from "@/app/__shared/store/config";
-
 import { Navigation } from "../types";
+import { createStore } from "@/app/__shared/store/config";
 
 type State = {
   navigation: Navigation;
@@ -18,7 +17,7 @@ type Actions = {
   closePopOverMenu: () => void;
 };
 
-export const useAppStore = createSelectors(createStore<State & Actions>(
+export const useAppStore = createStore<State & Actions>(
   "app-storage",
   (set) => ({
     navigation: {
@@ -160,4 +159,4 @@ export const useAppStore = createSelectors(createStore<State & Actions>(
     openPopOverMenu: () => set({ popOverMenuOpen: true }),
     closePopOverMenu: () => set({ popOverMenuOpen: false }),
   })
-));
+);

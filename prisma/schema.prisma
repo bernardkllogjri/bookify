@@ -106,7 +106,7 @@ model Product {
   reviews     Review[]
   imageAlt    String
   rating      Float
-  metadata    Json?
+  options     Json?
   description String  @db.Text
   highlights  ProductHighlights[]
   details     String  @db.Text

@@ -12,7 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Navigation } from "../../types";
 import { User } from "next-auth";
-import classnames from "@/app/__shared/utils/classnames";
+import clsx from "clsx";
 
 type HeaderProps = {
   user?: User;
@@ -83,10 +83,11 @@ const Header = ({
                         <Tab
                           key={category.name}
                           className={({ selected }) =>
-                            classnames(
-                              selected
-                                ? "border-indigo-600 text-indigo-600"
-                                : "border-transparent text-gray-900",
+                            clsx(
+                              {
+                                "border-indigo-600 text-indigo-600": selected,
+                                "border-transparent text-gray-900": !selected,
+                              },
                               "flex-1 whitespace-nowrap border-b-2 px-1 py-4 text-base font-medium"
                             )
                           }
@@ -264,10 +265,12 @@ const Header = ({
                         <>
                           <div className="relative flex">
                             <Popover.Button
-                              className={classnames(
-                                open
-                                  ? "border-indigo-600 text-indigo-600"
-                                  : "border-transparent text-gray-700 hover:text-gray-800",
+                              className={clsx(
+                                {
+                                  "border-indigo-600 text-indigo-600": open,
+                                  "border-transparent text-gray-700 hover:text-gray-800":
+                                    !open,
+                                },
                                 "relative z-10 -mb-px flex items-center border-b-2 pt-px text-sm font-medium transition-colors duration-200 ease-out"
                               )}
                             >

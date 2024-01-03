@@ -7,9 +7,11 @@ import { useEffect } from "react";
 import { useProductsStore } from "../store";
 
 const ProductsWrapper = ({ products }: { products: Product[] }) => {
-  const setProducts = useProductsStore.use.setProducts();
-  const openQuickView = useAppStore.use.openQuickView();
-  const selectProduct = useProductsStore.use.selectProduct();
+  const { setProducts, selectProduct } = useProductsStore([
+    "setProducts",
+    "selectProduct",
+  ]);
+  const { openQuickView } = useAppStore(["openQuickView"]);
   const onQuickViewOpen = (id: Product["id"]) => () => {
     selectProduct(id);
     openQuickView();

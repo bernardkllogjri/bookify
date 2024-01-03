@@ -1,4 +1,5 @@
-import { createSelectors, createStore } from "@/app/__shared/store/config";
+import { createStore } from "@/app/__shared/store/config";
+import { withZustandards } from 'zustand-ards';
 
 type State = {
   users: {
@@ -20,7 +21,7 @@ type Actions = {
   }[]) => void;
 };
 
-export const useUserStore = createSelectors(
+export const useUserStore = withZustandards(
   createStore<State & Actions>("user-storage", (set) => ({
     users: [],
     setUsers: (users) => {

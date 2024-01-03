@@ -1,28 +1,21 @@
-import { createSelectors, createStore } from "@/app/__shared/store/config";
 import hostedFields, { HostedFields } from "braintree-web/hosted-fields";
 
-import { TRPCClientErrorLike } from "@trpc/client";
-import { UseTRPCMutationResult } from "@trpc/react-query/shared";
+import { api } from "../__shared/utils/trpc/client";
 import client from "braintree-web/client";
-import { inferProcedureInput } from "@trpc/server";
-import { inferTransformedProcedureOutput } from "@trpc/server/shared";
+import { createStore } from "@/app/__shared/store/config";
 
 type State = {
-    braintreeClient: HostedFields | null;
+  braintreeClient: HostedFields | null;
 };
 
 type Actions = {
   initPaymentProvider: (braintreeToken: string) => void;
-  checkoutWithPaymentProvider: (call: UseTRPCMutationResult<
-    inferTransformedProcedureOutput<any>,
-    TRPCClientErrorLike<any>,
-    inferProcedureInput<any>,
-    any
-  >) => () => void;
+  checkoutWithPaymentProvider: () => Promise<void>;
 };
 
-export const useCheckoutStore = createSelectors(
-  createStore<State & Actions>("app-storage", (set, get) => ({
+export const useCheckoutStore = createStore<State & Actions>(
+  "app-storage",
+  (set, get) => ({
     braintreeClient: null,
     initPaymentProvider: async (braintreeToken) => {
       const clientInstance = await client.create({
@@ -52,10 +45,13 @@ export const useCheckoutStore = createSelectors(
       });
       set({ braintreeClient: instance });
     },
-    checkoutWithPaymentProvider: (call) => async () => {
-        const data = await get().braintreeClient?.tokenize()
-        if(!data || !data.nonce) return
-        const res = await call.mutate({ paymentMethodNonce: data.nonce })
-    }
-  }))
+    checkoutWithPaymentProvider: async () => {
+      const data = await get().braintreeClient?.tokenize();
+      if (!data || !data.nonce) return;
+      const res = await api.checkout.payCheckout.mutate({
+        paymentMethodNonce: data.nonce,
+      });
+      if (!data || !data.nonce) return;
+    },
+  })
 );
