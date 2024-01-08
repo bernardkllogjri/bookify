@@ -3,27 +3,25 @@
 import CheckoutForm from "../components/CheckoutForm";
 import { useCheckoutStore } from "../store";
 import { useEffect } from "react";
+import { useFormStore } from "@/app/forms/store";
 import { useProductsStore } from "@/app/product/store";
 
 const CheckoutWrapper = ({ braintreeToken }: { braintreeToken: string }) => {
-  const { initPaymentProvider, ...checkoutStore } = useCheckoutStore([
-    "initPaymentProvider",
-    "checkoutWithPaymentProvider",
-  ]);
+  const { initPaymentProvider } = useCheckoutStore(["initPaymentProvider"]);
+  const { setInputError } = useFormStore(["setInputError"])
   const productsStore = useProductsStore([
     "getProductsInCartTotalPrice",
     "productsInCart",
     "removeFromCart",
   ]);
   useEffect(
-    () => void initPaymentProvider(braintreeToken),
-    [initPaymentProvider, braintreeToken]
+    () => void initPaymentProvider(braintreeToken, setInputError),
+    [initPaymentProvider, braintreeToken, setInputError]
   );
 
   return (
     <CheckoutForm
       products={productsStore.productsInCart}
-      checkoutWithPaymentProvider={checkoutStore.checkoutWithPaymentProvider}
       removeProductFromCart={productsStore.removeFromCart}
       cartTotalPrice={productsStore.getProductsInCartTotalPrice()}
     />

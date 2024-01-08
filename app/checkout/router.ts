@@ -15,7 +15,7 @@ export const checkoutRouter = createTRPCRouter({
     const response = await gateway.clientToken.generate({});
     return response.clientToken;
   }),
-  payCheckout: publicProcedure
+  formSubmit: publicProcedure
     .input(
       z.object({
         paymentMethodNonce: z.string(),

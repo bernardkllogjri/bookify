@@ -1,94 +1,10 @@
-import { PartObjFromArrOfKeys, withZustandards } from "zustand-ards";
-import {
-  PersistOptions,
-  StateStorage,
-  createJSONStorage,
-  persist,
-} from "zustand/middleware";
-import { StateCreator, StoreApi, UseBoundStore, create } from "zustand";
+import { MainStateCreator, WithSelectors } from "../types";
+import { StateStorage, createJSONStorage, persist } from "zustand/middleware";
 import { del, get, set } from "idb-keyval";
 
-import { Draft } from "immer";
+import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-
-type PersistListener<S> = (state: S) => void;
-type StorePersist<S, Ps> = {
-  persist: {
-    setOptions: (options: Partial<PersistOptions<S, Ps>>) => void;
-    clearStorage: () => void;
-    rehydrate: () => Promise<void> | void;
-    hasHydrated: () => boolean;
-    onHydrate: (fn: PersistListener<S>) => () => void;
-    onFinishHydration: (fn: PersistListener<S>) => () => void;
-    getOptions: () => Partial<PersistOptions<S, Ps>>;
-  };
-};
-type Write<T, U> = Omit<T, keyof U> & U;
-type SkipTwo<T> = T extends {
-  length: 0;
-}
-  ? []
-  : T extends {
-      length: 1;
-    }
-  ? []
-  : T extends {
-      length: 0 | 1;
-    }
-  ? []
-  : T extends [unknown, unknown, ...infer A]
-  ? A
-  : T extends [unknown, unknown?, ...infer A]
-  ? A
-  : T extends [unknown?, unknown?, ...infer A]
-  ? A
-  : never;
-
-type StoreImmer<S> = S extends {
-  getState: () => infer T;
-  setState: infer SetState;
-}
-  ? SetState extends (...a: infer A) => infer Sr
-    ? {
-        setState(
-          nextStateOrUpdater: T | Partial<T> | ((state: Draft<T>) => void),
-          shouldReplace?: boolean | undefined,
-          ...a: SkipTwo<A>
-        ): Sr;
-      }
-    : never
-  : never;
-type WithImmer<S> = Write<S, StoreImmer<S>>;
-
-type MainStateCreator<T> = StateCreator<
-  T,
-  [
-    ["zustand/immer", never],
-    ["zustand/devtools", never],
-    ["zustand/persist", unknown]
-  ],
-  []
->;
-
-const withSelectors = withZustandards as <T>(
-  storeHook: UseBoundStore<
-    Write<WithImmer<StoreApi<T>>, StorePersist<T, unknown>>
-  >
-) => (<U, A extends (keyof T)[]>(
-  selector: A,
-  equals?:
-    | ((
-        a: PartObjFromArrOfKeys<T, A>,
-        b: PartObjFromArrOfKeys<T, A>
-      ) => boolean)
-    | undefined
-) => PartObjFromArrOfKeys<T, A>) & {
-  (): T;
-  <U_1>(
-    selector: (state: T) => U_1,
-    equals?: ((a: U_1, b: U_1) => boolean) | undefined
-  ): U_1;
-} & StoreApi<T>;
+import { withZustandards } from "zustand-ards";
 
 // it should be immer(devtools(...)) always because devtools needs to have the latest update in order to log the result https://github.com/pmndrs/zustand/blob/main/docs/guides/typescript.md#using-middlewares
 
@@ -119,17 +35,73 @@ const storage: StateStorage = {
   },
 };
 
-const createStore = <T>(storageName: string, config: MainStateCreator<T>) => {
+const withSelectors = withZustandards as WithSelectors;
+
+type JsonStorageOptions = {
+  reviver?: (key: string, value: unknown) => unknown;
+  replacer?: (key: string, value: unknown) => unknown;
+};
+
+// Extend the JsonStorageOptions with a debounceTime property
+interface DebouncedJsonStorageOptions extends JsonStorageOptions {
+  debounceTime: number;
+}
+
+// Function to create a debounced JSON storage
+export function createDebouncedJSONStorage(
+  storageApi: StateStorage,
+  options: DebouncedJsonStorageOptions
+) {
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+  let pendingValue: string | null = null;
+
+  // Function to set an item with debouncing
+  async function debouncedSetItem(name: string, value: string): Promise<void> {
+    if (timeoutId !== undefined) {
+      clearTimeout(timeoutId);
+    }
+    pendingValue = value;
+
+    // Set a timeout to set the item after the debounce time has passed
+    timeoutId = setTimeout(async () => {
+      if (pendingValue !== null) {
+        await storageApi.setItem(name, pendingValue);
+        pendingValue = null;
+      }
+    }, options.debounceTime);
+  }
+
+  // Create a new storage API with the debounced setItem function
+  const debouncedStorageApi: StateStorage = {
+    ...storageApi,
+    setItem: debouncedSetItem,
+  };
+
+  const { debounceTime, ...restOptions } = options;
+
+  // Create and return a JSON storage with the debounced storage API and the rest of the options
+  return createJSONStorage(() => debouncedStorageApi, restOptions);
+}
+
+const createStore = <T>(
+  storageName: string,
+  config: MainStateCreator<T>,
+  debounced = false
+) => {
   return withSelectors(
     create<T>()(
       immer(
         persist(config, {
           name: storageName,
-          storage: createJSONStorage(() => storage),
+          storage: debounced
+            ? createDebouncedJSONStorage(storage, {
+                debounceTime: 500,
+              })
+            : createJSONStorage(() => storage),
           partialize: (state: any) =>
             Object.fromEntries(
               Object.entries(state).filter(
-                ([key]) => !["braintreeClient"].includes(key)
+                ([key]) => !["braintreeClient", "formsStatus"].includes(key)
               )
             ),
         })

@@ -1,10 +1,10 @@
-import CheckoutForm from "./components/CheckoutForm";
+import CheckoutWrapper from "./wrappers/CheckoutWrapper";
 import { api } from "@/app/__shared/utils/trpc/server";
 
 const Checkout = async () => {
   const clientToken = await api.checkout.initializeCheckout.query()
   
-  return <CheckoutForm braintreeToken={clientToken} />;
+  return <CheckoutWrapper braintreeToken={clientToken} />;
 };
 
 export const dynamic = 'force-static'

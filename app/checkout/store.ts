@@ -1,23 +1,44 @@
-import hostedFields, { HostedFields } from "braintree-web/hosted-fields";
+import { FormInputsType, FormNameType } from "../forms/config";
+import hostedFields, {
+  HostedFields,
+  HostedFieldsHostedFieldsFieldData,
+  HostedFieldsHostedFieldsFieldName,
+} from "braintree-web/hosted-fields";
 
-import { api } from "../__shared/utils/trpc/client";
 import client from "braintree-web/client";
 import { createStore } from "@/app/__shared/store/config";
+
+const cardInputs: Partial<Record<HostedFieldsHostedFieldsFieldName, string>> = {
+  cardholderName: "Card holder name is not valid",
+  number: "Credit Card number is not valid",
+  expirationDate: "Expiration date is not valid",
+  cvv: "CVV number is not valid",
+};
 
 type State = {
   braintreeClient: HostedFields | null;
 };
 
 type Actions = {
-  initPaymentProvider: (braintreeToken: string) => void;
-  checkoutWithPaymentProvider: () => Promise<void>;
+  initPaymentProvider: (
+    braintreeToken: string,
+    setInputError: ({
+      formName,
+      inputId,
+      errors,
+    }: {
+      formName?: FormNameType;
+      inputId: FormInputsType;
+      errors: { [x: string]: string }[];
+    }) => void
+  ) => void;
 };
 
 export const useCheckoutStore = createStore<State & Actions>(
   "app-storage",
-  (set, get) => ({
+  (set) => ({
     braintreeClient: null,
-    initPaymentProvider: async (braintreeToken) => {
+    initPaymentProvider: async (braintreeToken, setInputError) => {
       const clientInstance = await client.create({
         authorization: braintreeToken,
       });
@@ -43,15 +64,49 @@ export const useCheckoutStore = createStore<State & Actions>(
           },
         },
       });
+
       set({ braintreeClient: instance });
-    },
-    checkoutWithPaymentProvider: async () => {
-      const data = await get().braintreeClient?.tokenize();
-      if (!data || !data.nonce) return;
-      const res = await api.checkout.payCheckout.mutate({
-        paymentMethodNonce: data.nonce,
+  
+      const setFieldErrors = (
+        emittedBy: HostedFieldsHostedFieldsFieldName,
+        field: HostedFieldsHostedFieldsFieldData
+      ) => {
+        if (field.isValid) {
+          setInputError({
+            formName: "checkout",
+            inputId: emittedBy as FormInputsType,
+            errors: [],
+          });
+        } else {
+          setInputError({
+            formName: "checkout",
+            inputId: emittedBy as FormInputsType,
+            errors: [
+              {
+                invalid: cardInputs[emittedBy] as string,
+              },
+            ],
+          });
+        }
+      };
+
+      Object.keys(cardInputs).forEach((cardInput) => {
+        setFieldErrors(cardInput as HostedFieldsHostedFieldsFieldName, {
+          isValid: false,
+          container: null as unknown as HTMLElement,
+          isFocused: false,
+          isEmpty: true,
+          isPotentiallyValid: false,
+        });
       });
-      if (!data || !data.nonce) return;
+
+      instance.on("empty", (e) => {
+        setFieldErrors(e.emittedBy, e.fields[e.emittedBy]);
+      });
+
+      instance.on("validityChange", (e) => {
+        setFieldErrors(e.emittedBy, e.fields[e.emittedBy]);
+      });
     },
   })
 );

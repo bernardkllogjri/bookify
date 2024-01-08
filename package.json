@@ -27,7 +27,6 @@
     "clsx": "^2.1.0",
     "idb-keyval": "^6.2.1",
     "immer": "^10.0.3",
-    "leiten-zustand": "^1.4.1",
     "next": "14.0.4",
     "next-auth": "^5.0.0-beta.4",
     "prisma": "^5.7.1",
