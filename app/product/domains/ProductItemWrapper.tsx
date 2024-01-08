@@ -19,7 +19,7 @@ const ProductItemWrapper = ({ productId }: { productId: string }) => {
   if (!product) return null;
 
   return (
-    <div className="bg-white">
+    <div>
       <Breadcrumbs
         breadcrumbs={[
           ...product.breadcrumbs,

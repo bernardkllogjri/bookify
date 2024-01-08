@@ -7,6 +7,7 @@ import { TRPCReactProvider } from "@/app/__shared/utils/trpc/client";
 import { auth } from "@/app/__shared/server/auth";
 import clsx from 'clsx';
 import { cookies } from "next/headers";
+import { usePathname } from "next/navigation";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,7 +26,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={clsx(inter.className)}>
+      <body className={clsx(inter.className, "bg-blue-50")}>
         <TRPCReactProvider cookies={cookies().toString()}>
           <MainWrapper user={user}>
             {children}

@@ -45,7 +45,7 @@ const Cart: FC<CartProps> = ({
               <div className="flex">
                 <button
                   type="button"
-                  className="font-medium text-indigo-600 hover:text-indigo-500"
+                  className="font-medium text-blue-600 hover:text-blue-500"
                   onClick={() => removeProductFromCart(product.id)}
                 >
                   Remove

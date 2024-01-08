@@ -68,7 +68,7 @@ const ProductOptions: FC<ProductOptionsProps> = ({ options, addToCart }) => {
           <h4 className="text-sm font-medium text-gray-900">Size</h4>
           <a
             href="#"
-            className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+            className="text-sm font-medium text-blue-600 hover:text-blue-500"
           >
             Size guide
           </a>
@@ -91,7 +91,7 @@ const ProductOptions: FC<ProductOptionsProps> = ({ options, addToCart }) => {
                     size.inStock
                       ? "cursor-pointer bg-white text-gray-900 shadow-sm"
                       : "cursor-not-allowed bg-gray-50 text-gray-200",
-                    active ? "ring-2 ring-indigo-500" : "",
+                    active ? "ring-2 ring-blue-500" : "",
                     "group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1"
                   )
                 }
@@ -103,7 +103,7 @@ const ProductOptions: FC<ProductOptionsProps> = ({ options, addToCart }) => {
                       <span
                         className={classnames(
                           active ? "border" : "border-2",
-                          checked ? "border-indigo-500" : "border-transparent",
+                          checked ? "border-blue-500" : "border-transparent",
                           "pointer-events-none absolute -inset-px rounded-md"
                         )}
                         aria-hidden="true"
@@ -138,7 +138,7 @@ const ProductOptions: FC<ProductOptionsProps> = ({ options, addToCart }) => {
       </div>
       <button
         type="submit"
-        className="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+        className="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-blue-600 px-8 py-3 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
       >
         Add to bag
       </button>

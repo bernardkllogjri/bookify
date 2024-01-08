@@ -8,6 +8,7 @@ import { signIn, signOut } from "next-auth/react";
 
 import CartIcon from "../cart/CartIcon";
 import { Fragment } from "react";
+import { Hero } from "../hero/Hero";
 import Image from "next/image";
 import Link from "next/link";
 import { Navigation } from "../../types";
@@ -22,6 +23,7 @@ type HeaderProps = {
   openPopOverMenu: () => void;
   closePopOverMenu: () => void;
   openCartDrawer: () => void;
+  withHero: boolean;
 };
 
 const Header = ({
@@ -32,9 +34,10 @@ const Header = ({
   openPopOverMenu,
   closePopOverMenu,
   openCartDrawer,
+  withHero = false
 }: HeaderProps) => {
   return (
-    <div className="bg-white fixed left-0 right-0 z-10">
+    <div>
       <Transition.Root show={popOverMenuOpen} as={Fragment}>
         <Dialog
           as="div"
@@ -85,7 +88,7 @@ const Header = ({
                           className={({ selected }) =>
                             clsx(
                               {
-                                "border-indigo-600 text-indigo-600": selected,
+                                "border-blue-600 text-blue-600": selected,
                                 "border-transparent text-gray-900": !selected,
                               },
                               "flex-1 whitespace-nowrap border-b-2 px-1 py-4 text-base font-medium"
@@ -223,8 +226,8 @@ const Header = ({
           </div>
         </Dialog>
       </Transition.Root>
-      <header className="relative bg-white">
-        {/* <p className="flex h-10 items-center justify-center bg-indigo-600 px-4 text-sm font-medium text-white sm:px-6 lg:px-8">
+      <header className="relative">
+        {/* <p className="flex h-10 items-center justify-center bg-blue-600 px-4 text-sm font-medium text-white sm:px-6 lg:px-8">
             Get free delivery on orders over $100
           </p> */}
 
@@ -242,7 +245,7 @@ const Header = ({
               </button>
 
               {/* Logo */}
-              <div className="ml-4 flex lg:ml-0">
+              <div className="ml-4 flex lg:ml-0 z-10">
                 <Link href="/">
                   <span className="sr-only">Your Company</span>
                   <Image
@@ -250,7 +253,7 @@ const Header = ({
                     height={32}
                     loading="lazy"
                     className="h-8 w-8"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                    src="https://tailwindui.com/img/logos/mark.svg?color=blue&shade=600"
                     alt="Logo"
                   />
                 </Link>
@@ -267,7 +270,7 @@ const Header = ({
                             <Popover.Button
                               className={clsx(
                                 {
-                                  "border-indigo-600 text-indigo-600": open,
+                                  "border-blue-600 text-blue-600": open,
                                   "border-transparent text-gray-700 hover:text-gray-800":
                                     !open,
                                 },
@@ -384,7 +387,7 @@ const Header = ({
                 </div>
               </Popover.Group>
 
-              <div className="ml-auto flex items-center">
+              <div className="ml-auto flex items-center z-10">
                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
                   <form
                     action={async () => {
@@ -450,6 +453,7 @@ const Header = ({
           </div>
         </nav>
       </header>
+      {withHero && <Hero />}
     </div>
   );
 };

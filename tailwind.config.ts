@@ -1,23 +1,90 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
+      colors: {
+        blue: {
+          50: "#f4f8fb",
+          100: "#e9eff5",
+          200: "#cddeea",
+          300: "#a1c3d8",
+          400: "#659dbd",
+          500: "#4d88aa",
+          600: "#3a6d8f",
+          700: "#305874",
+          800: "#2b4b61",
+          900: "#284152",
+          950: "#1b2936",
+        },
+        red: {
+          50: "#fbf7f1",
+          100: "#f5ebdf",
+          200: "#ebd4bd",
+          300: "#daad86",
+          400: "#d09167",
+          500: "#c67649",
+          600: "#b8623e",
+          700: "#994d35",
+          800: "#7b4031",
+          900: "#64362a",
+          950: "#351b15",
+        },
+        green: {
+          50: "#f8f6ed",
+          100: "#efecd8",
+          200: "#e0dbb6",
+          300: "#ccc58a",
+          400: "#b6af65",
+          500: "#8d8741",
+          600: "#7a7636",
+          700: "#5e5c2d",
+          800: "#4c4b28",
+          900: "#424125",
+          950: "#232310",
+        },
+        brown: {
+          50: "#f7f5ef",
+          100: "#ece5d5",
+          200: "#dbcaad",
+          300: "#c6aa7e",
+          400: "#bc986a",
+          500: "#a67b4c",
+          600: "#8e6240",
+          700: "#734b35",
+          800: "#614032",
+          900: "#54382f",
+          950: "#301c18",
+        },
+        yellow: {
+          50: "#fefaec",
+          100: "#fbeec1",
+          200: "#f8e08f",
+          300: "#f4cb55",
+          400: "#f1b62e",
+          500: "#eb9615",
+          600: "#d0710f",
+          700: "#ac5011",
+          800: "#8c3e14",
+          900: "#733414",
+          950: "#421a06",
+        },
+      },
       backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-conic":
+          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
     },
   },
   plugins: [
-    require('@tailwindcss/aspect-ratio'),
-    require('@tailwindcss/forms'),
+    require("@tailwindcss/aspect-ratio"),
+    require("@tailwindcss/forms"),
   ],
-}
-export default config
+};
+export default config;

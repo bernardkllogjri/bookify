@@ -6,6 +6,7 @@ import Header from "../components/header/Header";
 import ProductQuickViewModal from "@/app/product/components/ProductQuickViewModal";
 import { User } from "next-auth";
 import { useAppStore } from "../store";
+import { usePathname } from "next/navigation";
 import { useProductsStore } from "@/app/product/store";
 
 const MainWrapper = ({
@@ -36,6 +37,7 @@ const MainWrapper = ({
 
   const productsInCartCount = productsStore.productsInCart?.length;
   const cartTotalPrice = productsStore.getProductsInCartTotalPrice();
+  const pathname = usePathname()
 
   return (
     <>
@@ -47,6 +49,7 @@ const MainWrapper = ({
         popOverMenuOpen={appStore.popOverMenuOpen}
         openCartDrawer={appStore.openCartDrawer}
         productsInCartCount={productsInCartCount}
+        withHero={pathname === "/"}
       />
       <main className="px-4 py-20 sm:px-6 sm:py-24 lg:px-8">{children}</main>
       <Footer />
