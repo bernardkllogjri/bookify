@@ -23,7 +23,7 @@ const CheckoutForm: FC<CheckoutFormProps> = ({
 }) => {
   return (
     <>
-      <div className="flex flex-col items-center border-b bg-white pb-8 sm:flex-row sm:px-10 lg:px-20 xl:px-32">
+      <div className="flex flex-col items-center border-b pb-8 sm:flex-row sm:px-10 lg:px-20 xl:px-32">
         <Link href="/checkout" className="text-2xl font-bold text-gray-800">
           Checkout
         </Link>

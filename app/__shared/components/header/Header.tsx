@@ -236,7 +236,7 @@ const Header = ({
             <div className="flex h-16 items-center">
               <button
                 type="button"
-                className="relative rounded-md bg-white p-2 text-gray-400 lg:hidden"
+                className="relative rounded-md p-2 text-gray-400 lg:hidden z-10"
                 onClick={openPopOverMenu}
               >
                 <span className="absolute -inset-0.5" />
